@@ -52,10 +52,10 @@ function loadTowns() {
       loadedTowns = requestTowns.response;
 
       loadedTowns = loadedTowns.sort((a, b) => {
-        return a.name > b.name ? 1 : -1;
+        return a.name.localeCompare(b.name);
       });
 
-      
+
 
       resolve(loadedTowns);
 
@@ -72,11 +72,11 @@ function loadTowns() {
 
 }
 loadTowns()
-  .then(() => loadingBlock.style.display = 'none')
-  .then(() => filterInput.style.display = 'block')
+  .then(() => loadingBlock.classList.add('hidden'))
+  .then(() => filterInput.classList.remove('hidden'))
   .catch(() => {
-    loadingBlock.style.display = 'none';
-    loadingFailedBlock.style.display = 'block';
+    loadingBlock.classList.add('hidden');
+    loadingFailedBlock.classList.remove('hidden');
   });
 
 
@@ -117,12 +117,16 @@ const filterInput = homeworkContainer.querySelector('#filter-input');
 /* Блок с результатами поиска */
 const filterResult = homeworkContainer.querySelector('#filter-result');
 
-filterInput.style.display = 'none';
-loadingFailedBlock.style.display = 'none';
+filterInput.classList.add('hidden');
+loadingFailedBlock.classList.add('hidden');
 
 retryButton.addEventListener('click', () => {
+  loadTowns()
+    .then(() => loadingBlock.classList.add('hidden'))
+    .then(() => loadingFailedBlock.classList.add('hidden'))
+    .then(() => filterInput.classList.remove('hidden'));
 
-  loadTowns();
+
 });
 
 
@@ -131,19 +135,17 @@ retryButton.addEventListener('click', () => {
 
 filterInput.addEventListener('input', function () {
 
-  while (filterResult.firstChild) {
-    filterResult.removeChild(filterResult.firstChild);
-  }
+  filterResult.innerHTML = '';
 
-  for (let i = 0; i < loadedTowns.length; i++) {
-    if (isMatching(loadedTowns[i].name, filterInput.value) && filterInput.value != '') {
-      const newDiv = document.createElement('div');
-      filterResult.appendChild(newDiv);
-      newDiv.textContent = loadedTowns[i].name;
+  for (let element of loadedTowns) {
+    if (isMatching(element.name, filterInput.value) && filterInput.value) {
+        const newDiv = document.createElement('div');
+        filterResult.appendChild(newDiv);
+        newDiv.textContent = element.name;
 
     }
 
-  }
+}
 
 
 });

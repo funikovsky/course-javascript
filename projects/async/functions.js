@@ -43,7 +43,7 @@ function loadAndSortTowns() {
       let loadedTowns = requestTowns.response;
 
       loadedTowns = loadedTowns.sort((a, b) => {
-        return a.name > b.name ? 1 : -1;
+        return a.name.localeCompare(b.name);
       });
 
       
