@@ -35,18 +35,25 @@ function createServer() {
       try {
         const body = await readBody(req);
 
-        if (req.url === '/coords') {
+        if (req.url === '/geo-review/coords') {
+          console.log('===', storage.getCoords())
           end(res, storage.getCoords());
-        } else if (req.url === '/add') {
+        } else if (req.url === '/geo-review/add') {
           storage.add(body);
-          end(res, { ok: true });
-        } else if (req.url === '/list') {
+          end(res, {
+            ok: true
+          });
+        } else if (req.url === '/geo-review/list') {
           end(res, storage.getByCoords(body.coords));
         } else {
           end(res, {});
         }
       } catch (e) {
-        end(res, { error: { message: e.message } }, 500);
+        end(res, {
+          error: {
+            message: e.message
+          }
+        }, 500);
       }
     })
     .listen(8181);

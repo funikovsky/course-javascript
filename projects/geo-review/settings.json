@@ -1,18 +1,18 @@
 {
   "proxy": {
-    "/geo-reviews/list": {
+    "/geo-review/list": {
       "target": "http://localhost:8181",
       "pathRewrite": {
         "^/projects": ""
       }
     },
-    "/geo-reviews/add": {
+    "/geo-review/add": {
       "target": "http://localhost:8181",
       "pathRewrite": {
         "^/projects": ""
       }
     },
-    "/geo-reviews/coords": {
+    "/geo-review/coords": {
       "target": "http://localhost:8181",
       "pathRewrite": {
         "^/projects": ""
