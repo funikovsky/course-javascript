@@ -1,0 +1,83 @@
+
+* {
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+html, body {
+  
+  height: 100%;
+ 
+}
+.wrapper{
+    height: 100%;
+    position: relative;
+}
+
+.section {
+    height: 100%;
+    width: 100%;
+   
+    
+    
+}
+
+.form {
+    width: 310px;
+}
+
+.ballon-title {
+    margin-bottom: 20px;
+}
+
+.reviews-content {
+    width: 310px;
+    height: 100px;
+    max-height: 500px;
+    overflow: scroll;
+}
+
+.add-name-input {
+    width: 310px;
+    height: 38px;
+    background: #FFFFFF; 
+    padding:0 5px; 
+    border: 1px solid #1371C8; 
+    box-sizing: border-box;
+    border-radius: 3px;margin-bottom: 10px;
+}
+.add-place-input {
+    width: 310px;
+    height: 38px;
+    background: #FFFFFF;
+    border: 1px solid #1371C8;
+    box-sizing: border-box;
+    border-radius: 3px;
+    padding:0 5px;
+    margin-bottom: 10px;
+}
+
+.add-review-textarea {
+    width: 310px;
+    height: 98px;
+    background: #FFFFFF; 
+    padding:0 5px;
+    border: 1px solid #1371C8;
+    box-sizing: border-box;
+    border-radius: 3px;margin-bottom: 10px;
+    resize: none;
+    
+}
+
+.button {
+    background:#FF8663;
+    width:107px;
+    height:38px;
+    border-radius:3px;
+    margin-bottom: 10px;
+}
+
+
+
+
