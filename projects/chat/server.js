@@ -25,6 +25,9 @@ function onConnect(socket) {
         connections
       );
     }
+    if (message.type === 'image') {
+      connections.get(socket).userImageUrl = message.url;
+    }
 
     sendMessageFrom(message, socket, excludeItself);
   });

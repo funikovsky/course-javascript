@@ -46,6 +46,32 @@ const startSocket = () => {
       messageText.value = '';
     }
   });
+
+  userInfo.addEventListener('dragover', (e) => {
+    if (e.dataTransfer.items.length && e.dataTransfer.items[0].kind === 'file') {
+      e.preventDefault();
+    }
+  });
+
+  userInfo.addEventListener('drop', (e) => {
+    const file = e.dataTransfer.items[0].getAsFile();
+    const reader = new FileReader();
+
+    reader.readAsDataURL(file);
+
+    reader.addEventListener('load', () => {
+      userPhoto.style.backgroundImage = `url(${reader.result})`;
+      photoResult = reader.result;
+      socket.send(
+        JSON.stringify({
+          type: 'image',
+          url: reader.result,
+        })
+      );
+    });
+
+    e.preventDefault();
+  });
 };
 
 function addMessage(stringMessage) {
@@ -114,23 +140,4 @@ buttonSaveName.addEventListener('click', function (e) {
 
     startSocket();
   }
-});
-
-userInfo.addEventListener('dragover', (e) => {
-  if (e.dataTransfer.items.length && e.dataTransfer.items[0].kind === 'file') {
-    e.preventDefault();
-  }
-});
-
-userInfo.addEventListener('drop', (e) => {
-  const file = e.dataTransfer.items[0].getAsFile();
-  const reader = new FileReader();
-
-  reader.readAsDataURL(file);
-
-  reader.addEventListener('load', () => {
-    userPhoto.style.backgroundImage = `url(${reader.result})`;
-    photoResult = reader.result;
-  });
-  e.preventDefault();
 });
