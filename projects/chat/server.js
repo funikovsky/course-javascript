@@ -20,12 +20,11 @@ function onConnect(socket) {
       sendMessageTo(
         {
           type: 'user-list',
-          data: [...connections.values()].map((item) => item.userName).filter(Boolean),
+          data: [...connections.values()].map((item) => item).filter(Boolean),
         },
         connections
       );
-    }
-    if (message.type === 'image') {
+    } else if (message.type === 'image') {
       connections.get(socket).userImageUrl = message.url;
     }
 
@@ -39,7 +38,7 @@ function onConnect(socket) {
     sendMessageTo(
       {
         type: 'user-list',
-        data: [...connections.values()].map((item) => item.userName).filter(Boolean),
+        data: [...connections.values()].map((item) => item).filter(Boolean),
       },
       connections
     );

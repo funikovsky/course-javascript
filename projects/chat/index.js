@@ -13,7 +13,8 @@ const messageText = document.querySelector('#messageText'),
   mainUserConteiner = document.querySelector('.main__user'),
   guestUsersList = document.querySelector('.guest__users-list'),
   userInfo = document.querySelector('.user__info'),
-  userPhoto = document.querySelector('.user-photo');
+  userPhoto = document.querySelector('.user-photo'),
+  counterUsers = document.querySelector('.counter-users');
 
 const startSocket = () => {
   const socket = new WebSocket('ws://localhost:9000');
@@ -33,6 +34,7 @@ const startSocket = () => {
   socket.addEventListener('message', (message) => {
     addMessage(message.data);
     updateUserList(message.data);
+    changeAvatar(message.data);
   });
 
   sendButton.addEventListener('click', () => {
@@ -96,21 +98,25 @@ function addMessage(stringMessage) {
     messageItem.appendChild(divInMessageItem);
     messageContainer.appendChild(messageItem);
     const div = document.createElement('div');
+    div.classList.add(`${message.name}`);
 
-    div.style.height = '50px';
-    div.style.width = '50px';
-    div.style.borderRadius = '50%';
-
-    if (message.url) {
-      div.style.background = `url(${message.url}) center center/cover no-repeat`;
-    } else {
-      const bgUserPhoto = window
-        .getComputedStyle(userPhoto, null)
-        .getPropertyValue('background');
-      div.style.background = bgUserPhoto;
-    }
+    setPropertyAvatar(div, message);
 
     messageItem.insertBefore(div, divInMessageItem);
+  }
+}
+
+function setPropertyAvatar(element, message) {
+  element.style.height = '50px';
+  element.style.width = '50px';
+  element.style.borderRadius = '50%';
+
+  if (message.url) {
+    element.style.background = `url(${message.url}) center center/cover no-repeat`;
+  } else {
+    element.style.background =
+      'rgba(0, 0, 0, 0) url("http://localhost:8080/projects/chat/photo/no-photo.png")' +
+      'no-repeat scroll 50% 50% / cover padding-box border-box';
   }
 }
 
@@ -118,11 +124,48 @@ function updateUserList(userList) {
   const message = JSON.parse(userList);
   if (message.type === 'user-list') {
     guestUsersList.innerHTML = '';
-    for (const name of message.data) {
-      const element = document.createElement('li');
-      guestUsersList.appendChild(element);
-      element.textContent = name;
+    counterUsers.innerHTML = '';
+    let count = 0;
+
+    for (const item of message.data) {
+      const usersListItem = document.createElement('li');
+      usersListItem.classList.add('guest__users-item');
+      const element = document.createElement('div');
+      guestUsersList.appendChild(usersListItem);
+      element.textContent = item.userName;
+      count++;
+
+      const div = document.createElement('div');
+      div.classList.add(`${item.userName}`);
+      div.classList.add('avatar');
+
+      div.style.height = '50px';
+      div.style.width = '50px';
+      div.style.borderRadius = '50%';
+
+      if (item.userImageUrl) {
+        div.style.background = `url(${item.userImageUrl}) center center/cover no-repeat`;
+      } else {
+        div.style.background =
+          'rgba(0, 0, 0, 0) url("http://localhost:8080/projects/chat/photo/no-photo.png")' +
+          'no-repeat scroll 50% 50% / cover padding-box border-box';
+      }
+      usersListItem.appendChild(element);
+      usersListItem.insertBefore(div, element);
     }
+    counterUsers.innerHTML = `Количество участников: ${count}`;
+  }
+}
+
+function changeAvatar(stringMessage) {
+  const message = JSON.parse(stringMessage);
+
+  if (message.type === 'image' && message.url) {
+    const avatars = document.querySelectorAll(`.${message.name}`);
+    avatars.forEach((avatar) => {
+      console.log(message.name);
+      avatar.style.background = `url(${message.url}) center center/cover no-repeat`;
+    });
   }
 }
 
