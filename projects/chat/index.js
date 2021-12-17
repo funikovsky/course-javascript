@@ -14,7 +14,12 @@ const messageText = document.querySelector('#messageText'),
   guestUsersList = document.querySelector('.guest__users-list'),
   userInfo = document.querySelector('.user__info'),
   userPhoto = document.querySelector('.user-photo'),
-  counterUsers = document.querySelector('.counter-users');
+  counterUsers = document.querySelector('.counter-users'),
+  burgerOpen = document.querySelector('.user__info-load-photo'),
+  modalBurger = document.querySelector('.modal__burger'),
+  burgerClose = document.querySelector('.modal__close'),
+  btnContainer = document.querySelector('.btn-container'),
+  burgerTitle = document.querySelector('.burger__title');
 
 const startSocket = () => {
   const socket = new WebSocket('ws://localhost:9000');
@@ -63,13 +68,41 @@ const startSocket = () => {
 
     reader.addEventListener('load', () => {
       userPhoto.style.backgroundImage = `url(${reader.result})`;
-      photoResult = reader.result;
-      socket.send(
-        JSON.stringify({
-          type: 'image',
-          url: reader.result,
-        })
-      );
+
+      userPhoto.classList.add('user-photo--change-style');
+      mainUserConteiner.classList.add('hidden');
+      btnContainer.classList.remove('hidden');
+      burgerClose.classList.add('hidden');
+      burgerTitle.classList.add('hidden');
+
+      btnContainer.addEventListener('click', function (e) {
+        if (e.target.matches('.btn-save')) {
+          photoResult = reader.result;
+
+          userPhoto.classList.remove('user-photo--change-style');
+          mainUserConteiner.classList.remove('hidden');
+          btnContainer.classList.add('hidden');
+          burgerClose.classList.remove('hidden');
+          burgerTitle.classList.remove('hidden');
+
+          socket.send(
+            JSON.stringify({
+              type: 'image',
+              url: reader.result,
+            })
+          );
+        } else if (e.target.matches('.btn-cancel')) {
+          userPhoto.classList.remove('user-photo--change-style');
+          mainUserConteiner.classList.remove('hidden');
+          btnContainer.classList.add('hidden');
+          burgerClose.classList.remove('hidden');
+          burgerTitle.classList.remove('hidden');
+
+          userPhoto.style.background =
+            'rgba(0, 0, 0, 0) url("http://localhost:8080/projects/chat/photo/no-photo.png")' +
+            'no-repeat scroll 50% 50% / cover padding-box border-box';
+        }
+      });
     });
 
     e.preventDefault();
@@ -94,7 +127,7 @@ function addMessage(stringMessage) {
 
     messageContainer.appendChild(messageItem);
   } else if (message.text) {
-    divInMessageItem.innerHTML = message.name + ': <b>' + message.text + '</b>';
+    divInMessageItem.innerHTML = message.name + ': <span>' + message.text + '</span>';
     messageItem.appendChild(divInMessageItem);
     messageContainer.appendChild(messageItem);
     const div = document.createElement('div');
@@ -153,7 +186,7 @@ function updateUserList(userList) {
       usersListItem.appendChild(element);
       usersListItem.insertBefore(div, element);
     }
-    counterUsers.innerHTML = `Количество участников: ${count}`;
+    counterUsers.innerHTML = `Участников: ${count}`;
   }
 }
 
@@ -163,7 +196,6 @@ function changeAvatar(stringMessage) {
   if (message.type === 'image' && message.url) {
     const avatars = document.querySelectorAll(`.${message.name}`);
     avatars.forEach((avatar) => {
-      console.log(message.name);
       avatar.style.background = `url(${message.url}) center center/cover no-repeat`;
     });
   }
@@ -184,3 +216,6 @@ buttonSaveName.addEventListener('click', function (e) {
     startSocket();
   }
 });
+
+burgerOpen.addEventListener('click', () => modalBurger.classList.add('show'));
+burgerClose.addEventListener('click', () => modalBurger.classList.remove('show'));
