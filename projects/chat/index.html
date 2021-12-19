@@ -1,0 +1,335 @@
+
+<style>
+  body {
+    overflow-y: hidden;
+  }
+  input:focus {outline: 0;}
+  input {
+    border: none;
+  }
+
+  ul li {
+    list-style-type: none;
+  }
+
+  .message-zone {
+    display: flex;
+    height: 100vh;
+  }
+  .hidden {
+    display: none;
+  }
+  .left__message-zone {
+    width: 263px;
+    height: 100%;
+    background: #17212B;
+    border-right: 1px solid #0E1621;;
+    
+  }
+  .right__message-zone {
+    width: 100%;
+    background: #17212B;
+  }
+  .main__message-zone {
+    height: 70%;
+    display: flex;
+    flex-direction: column;
+    overflow-y: hidden;
+  }
+  .message-title {
+    font-size: 14px;
+    padding: 16px;
+    border-left: 1px solid #0E1621; ;
+    background: #17212B;
+    color: #FFFFFF;
+  }
+  .counter-users {
+    font-family: Ubuntu;
+    font-size: 12px;
+    color: #7F91A4;
+    margin-top: 4px;
+  }
+  .free-zone {
+    flex: 1 0 auto;
+    background: #0E1621;;
+  }
+  .burger__conteiner {
+    position: relative;
+    min-height: 100px;
+  }
+  .user__info {
+    position: relative;
+    min-height: 100px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-size: 30px;
+    font-weight: bold;
+    margin: 0 auto;
+  }
+  .user__info-load-photo {
+    position: absolute;
+    top: 30%;
+    left: 15%;
+  }
+
+  .guest__users-list {
+    padding: 0;
+    color: green;
+    font-weight: bold;
+
+  }
+  .guest__users-item {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+  }
+
+  .avatar {
+    margin: 2px 16px;
+  }
+  .guest__users {
+    padding-top: 10px;
+    text-align: center;
+  }
+  .modal {
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    left: 0;
+    top: 0;
+
+  }
+  .modal__dialog {
+    position: absolute;
+    width: 452px;
+    height: 497px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #17212B;
+    color: #fff;
+    
+  }
+  .modal__content {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+  }
+  .modal__title {
+    font-size: 24px;
+    margin-bottom: 13px;
+  }
+  .modal__desc {
+
+    width: 330px;
+    height: 45px;
+    font-size: 16px;
+    color: #7F91A4;
+    margin-bottom: 31px;
+    
+  }
+  .modal__input {
+    margin-bottom: 42px;
+  }
+  .modal__input input {
+    width: 298px;
+    height: 30px;
+  }
+
+  .btn {
+    width: 132px;
+    height: 43px;
+    background: #5188C1;
+    border-radius: 5px;
+    font-size: 15px;
+    line-height: 17px;
+    text-transform: uppercase;
+    color: #FFFFFF;
+  }
+  .list-group {
+    background: #0E1621;
+    color: #FFFFFF;
+    margin: 0;
+    overflow: auto;
+  }
+  .list-group__item {
+    display: flex;
+    margin-bottom: 10px;
+    
+  }
+  .message {
+    align-self: center;
+    margin-left: 20px;
+    color: #5387C1;
+    font-weight: bold;
+  }
+  .message span {
+    color: #FFFFFF;
+    font-weight: normal;
+  }
+
+  .user-photo {
+    width: 86px;
+    height: 86px;
+    border-radius: 50%;
+    margin-right: 15px;
+    background: url(./projects/chat/photo/no-photo.png) center center/cover no-repeat;
+  }
+  .input-zone {
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+  }
+  #messageText {
+    width: 500px;
+    height: 28px;
+    background: #17212B;
+    color: #FFFFFF;
+  }
+  #sendButton {
+    width: 112px;
+    height: 28px;
+    color: #FFFFFF;
+
+    background: #5387C1;
+    border-radius: 5px;
+  }
+  .modal__burger {
+    display: none;
+    
+    position: fixed;
+    flex-direction: column;
+    width: 364px;
+    min-height: 220px;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: #FFFFFF;
+    background: #17212B;
+    border-radius: 4px;
+    padding: 32px;
+
+  }
+  .burger__title {
+    margin-bottom: 39px;
+  }
+
+
+  .show {
+    display: flex;
+  }
+
+  .modal__close {
+    position: absolute;
+    top: 5%;
+    left: 92%;
+  }
+
+  .btn-container {
+    display: flex;
+    justify-content: end;
+    color: #6BB2F2;
+    align-items: center;
+    margin-top: 30px;
+
+  }
+  .btn-save {
+    padding: 10px;
+    margin-left: 20px;
+    background: #1D2A3A;
+    border-radius: 2px;
+
+  }
+  .user-photo--change-style {
+    width: 284px;
+    height: 308px;
+    border-radius: 1%;
+  }
+
+
+</style>
+
+<div class="message-zone hidden">
+  <div class="left__message-zone">
+    <div class="burger__conteiner">
+      <!-- <div class = "user-photo"> </div>
+      <div class="main__user"></div> -->
+      <div class="user__info-load-photo">
+        <img class = "user__info-burger" src="./projects/chat/icon/burger.png" alt="burger">
+      </div>
+    </div>
+    <div class="guest__users">
+      
+      <ul class="guest__users-list"></ul>
+    </div>
+
+  </div>
+  <div class="right__message-zone">
+    <div class = "main__message-zone">
+      <div class="message-title">
+        <div class = "message-title__text">ЧАТ</div>
+        <div class="counter-users"></div>
+      </div>
+      <div class="free-zone"></div>
+      
+      
+      <ul class="list-group" id="messageContainer"></ul>
+    </div>
+    <div class="input-zone">
+      <div>
+        <input type="text"id="messageText" placeholder="Введите сообщение..." disabled>
+      </div>
+      <div>
+        <button id="sendButton" disabled>отправить</button>
+      </div>
+    </div>
+
+
+  </div>
+  
+</div>
+
+
+<div class="modal">
+  <div class="modal__dialog">
+    <div class="modal__content">
+      <form action="#" class="modal__form">
+        <div class="modal__title">Авторизация</div>
+        <div class="modal__desc">Введите пожалуйста свой ник для дальнейшей авторизации</div>
+        <div class="modal__input">
+          <input type="text" id="name" placeholder="Введите свой ник">
+
+        </div>
+        
+        <button id="save" class="btn modal__btn">войти</button>
+      </form>
+    </div>
+  </div>
+</div>
+<div class="modal__burger">
+  <div class="burger__title">Загрузка фото</div>
+  <div class="user__info">
+    <div class = "user-photo"> </div>
+    <div class="main__user"></div>
+    
+    
+  </div>
+  <div class="btn-container hidden">
+    <div class="btn-cancel">ОТМЕНА</div>
+    <div class="btn-save">СОХРАНИТЬ</div>
+  </div>
+  
+  <div class="modal__close">
+    <img src="./projects/chat/icon/close.png" alt="">
+  </div>
+
+</div>
+
+
+
+  
